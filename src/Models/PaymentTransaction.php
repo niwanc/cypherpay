@@ -1,5 +1,5 @@
 <?php
-namespace Cyphergarden\Cypherpay\Models;
+namespace Niwanc\Cypherpay\Models;
 
 use Illuminate\Database\Eloquent\Model;
 

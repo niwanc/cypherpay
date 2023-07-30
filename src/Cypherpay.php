@@ -1,9 +1,9 @@
 <?php
 
-namespace Cyphergarden\Cypherpay;
+namespace Niwanc\Cypherpay;
 
-use Cyphergarden\Cypherpay\Models\PaymentTransaction;
-use Cyphergarden\Cypherpay\Services\PaymentService;
+use Niwanc\Cypherpay\Models\PaymentTransaction;
+use Niwanc\Cypherpay\Services\PaymentService;
 
 class Cypherpay
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Cyphergarden\Cypherpay;
+namespace Niwanc\Cypherpay;
 
-use Cyphergarden\Cypherpay\Models\PaymentTransaction;
+use Niwanc\Cypherpay\Models\PaymentTransaction;
 use Illuminate\Support\ServiceProvider;
 
 class CypherpayServiceProvider extends ServiceProvider

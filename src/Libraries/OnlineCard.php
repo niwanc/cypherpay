@@ -1,8 +1,8 @@
 <?php
 
-namespace Cyphergarden\Cypherpay\Libraries;
+namespace Niwanc\Cypherpay\Libraries;
 
-use Cyphergarden\Cypherpay\Services\PaymentService;
+use Niwanc\Cypherpay\Services\PaymentService;
 
 class OnlineCard
 {

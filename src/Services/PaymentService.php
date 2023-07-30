@@ -1,6 +1,6 @@
 <?php
 
-namespace Cyphergarden\Cypherpay\Services;
+namespace Niwanc\Cypherpay\Services;
 
 use Illuminate\Http\Request;
 

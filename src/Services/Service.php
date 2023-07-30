@@ -1,5 +1,5 @@
 <?php
-namespace Cyphergarden\Cypherpay\Services;
+namespace Niwanc\Cypherpay\Services;
 
 use GuzzleHttp\Exception\BadResponseException;
 use Illuminate\Http\Request;

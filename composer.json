@@ -5,7 +5,7 @@
         "cypherpay",
         "boc"
     ],
-    "homepage": "https://github.com/cyphergarden/cypherpay",
+    "homepage": "https://github.com/niwanc/cypherpay",
     "license": "MIT",
     "type": "library",
     "authors": [

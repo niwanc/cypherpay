@@ -1,6 +1,6 @@
 <?php
 
-namespace Cyphergarden\Cypherpay;
+namespace Niwanc\Cypherpay;
 
 use Illuminate\Support\Facades\Facade;
 
