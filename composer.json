@@ -1,5 +1,5 @@
 {
-    "name": "cyphergarden/cypherpay",
+    "name": "niwanc/cypherpay",
     "description": "Mastercard and Visa for BOC",
     "keywords": [
         "cypherpay",
@@ -27,12 +27,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Cyphergarden\\Cypherpay\\": "src/"
+            "Niwanc\\Cypherpay\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Cyphergarden\\Cypherpay\\Tests\\": "tests"
+            "Niwanc\\Cypherpay\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -46,10 +46,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Cyphergarden\\Cypherpay\\CypherpayServiceProvider"
+                "Niwanc\\Cypherpay\\CypherpayServiceProvider"
             ],
             "aliases": {
-                "Cypherpay": "Cyphergarden\\Cypherpay\\CypherpayFacade"
+                "Cypherpay": "Niwanc\\Cypherpay\\CypherpayFacade"
             }
         }
     }
