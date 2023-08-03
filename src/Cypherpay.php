@@ -19,10 +19,10 @@ class Cypherpay
         $session_request['initiator']['userId']= $paymentData['user_id'];
         $session_request['apiOperation']  = "INITIATE_CHECKOUT";
         $session_request['interaction']['operation'] = "PURCHASE";
-        $session_request['interaction']['returnUrl']  = config("cypherpay.redirect_url") ;
+        $session_request['interaction']['returnUrl']  = 'Mobile'?config("cypherpay.redirect_url_mobile"):config("cypherpay.redirect_url") ;
         $session_request['interaction']['merchant']['name']  =  '   MINISTRY OF WATER SUPPLY';
-        $session_request['interaction']['merchant']['address']['line1']  = 'LINE ONE';
-        $session_request['interaction']['merchant']['address']['line2']  = 'LINE twO';
+        $session_request['interaction']['merchant']['address']['line1']  = config("cypherpay.address_line1");
+        $session_request['interaction']['merchant']['address']['line2']  = config("cypherpay.address_line2");
         $session_request['order']['id'] =  $paymentData['reference_id'];
         $session_request['order']['amount'] = $amount;
         $session_request['order']['currency'] = $currency;
@@ -39,7 +39,7 @@ class Cypherpay
                 [
                     'reference_id' => $paymentData['reference_id'],
                     'user_id' => $paymentData['user_id'],
-                    'description' => $orderReferenceId. '-->'.$paymentData['description'],
+                    'description' => 'REFERENCE NO ------->' .$orderReferenceId,
                     'amount' => $amount,
                     'successIndicator' => $session['successIndicator'],
                     'session_id' => $session['session']['id'],
@@ -49,7 +49,7 @@ class Cypherpay
             );
             if($cardtype == 'Mobile')
                 return json_encode([
-                    "status"=>500,
+                    "status"=>200,
                     'data' => $paymentTransaction
                 ]);
             else
@@ -80,15 +80,20 @@ class Cypherpay
                     $transaction->status = 'COMPLETED';
                     $transaction->transaction_reference_id = $transaction_receipt;
                     $transaction->save();
-                    return true;
+                    return $transaction;
                 } else {
                     $transaction->status = 'FAILED';
                     $transaction->save();
-                    return false;
+                    return $transaction;
                 }
 
             }
         }
 
+    }
+
+    public function response($resultData)
+    {
+        return view('cypherpay::payment_summary', compact('resultData'));
     }
 }
