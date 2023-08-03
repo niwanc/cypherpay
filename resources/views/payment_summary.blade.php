@@ -35,11 +35,11 @@
 <div class="container" >
     <span>
         <h1>Payment Summary</h1>
-         @if($resultData->status ==='COMPLETED')
-            <p>Total Amount: {{$resultData->amount}} LKR</p></br>
-            <p>Reference No: {{$resultData->transaction_Reference_id}}</p>
+         @if($resultData['status'] === 200)
+            <p>Total Amount: {{$resultData['data']->amount}} LKR</p>
+            <p>Reference No: {{$resultData['data']->transaction_reference_id}}</p>
         @else
-          <p>ERROR: Payment Process Error</p>
+          <p>ERROR: Payment Process Error:Contact System Admin</p>
         @endif
     </span>
 </div>

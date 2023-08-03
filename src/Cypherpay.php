@@ -70,23 +70,26 @@ class Cypherpay
     {
         if( $resultIndicator = $resultData['resultIndicator']) {
             $transaction = PaymentTransaction::where('successIndicator', $resultIndicator)->first();
-            $transactions = $this->paymentService->getPaymentDetails($transaction);
+            if($transaction) {
+                $transactions = $this->paymentService->getPaymentDetails($transaction);
+                if ($transactions && $transactions['result'] == 'SUCCESS' && $transactions['status'] == 'CAPTURED') {
+                    $transaction_index = count($transactions['transaction']) - 1;
+                    $transaction_result = $transactions['transaction'][$transaction_index]['result'];
+                    $transaction_receipt = $transactions['transaction'][$transaction_index]['transaction']['receipt'];
+                    if ($transaction_result == 'SUCCESS' && !empty($transaction_receipt)) {
+                        $transaction->status = 'COMPLETED';
+                        $transaction->transaction_reference_id = $transaction_receipt;
+                        $transaction->save();
+                        return $transaction;
+                    } else {
+                        $transaction->status = 'FAILED';
+                        $transaction->save();
+                        return $transaction;
+                    }
 
-            if( $transactions && $transactions['result'] == 'SUCCESS' && $transactions['status'] == 'CAPTURED' ) {
-                $transaction_index = count( $transactions['transaction'] ) - 1;
-                $transaction_result = $transactions['transaction'][$transaction_index]['result'];
-                $transaction_receipt = $transactions['transaction'][$transaction_index]['transaction']['receipt'];
-                if($transaction_result == 'SUCCESS' && ! empty($transaction_receipt)){
-                    $transaction->status = 'COMPLETED';
-                    $transaction->transaction_reference_id = $transaction_receipt;
-                    $transaction->save();
-                    return $transaction;
-                } else {
-                    $transaction->status = 'FAILED';
-                    $transaction->save();
-                    return $transaction;
                 }
-
+            }else {
+                return false;
             }
         }
 
