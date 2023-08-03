@@ -19,7 +19,7 @@ class Cypherpay
         $session_request['initiator']['userId']= $paymentData['user_id'];
         $session_request['apiOperation']  = "INITIATE_CHECKOUT";
         $session_request['interaction']['operation'] = "PURCHASE";
-        $session_request['interaction']['returnUrl']  = 'Mobile'?config("cypherpay.redirect_url_mobile"):config("cypherpay.redirect_url") ;
+        $session_request['interaction']['returnUrl']  = $cardtype === 'Mobile'?config("cypherpay.redirect_url_mobile"):config("cypherpay.redirect_url") ;
         $session_request['interaction']['merchant']['name']  =  '   MINISTRY OF WATER SUPPLY';
         $session_request['interaction']['merchant']['address']['line1']  = config("cypherpay.address_line1");
         $session_request['interaction']['merchant']['address']['line2']  = config("cypherpay.address_line2");
