@@ -35,7 +35,7 @@ class Cypherpay
 
         if( $session['result'] == 'SUCCESS' && ! empty( $session['successIndicator'] ) ) {
 
-            PaymentTransaction::create(
+            $paymentTransaction = PaymentTransaction::create(
                 [
                     'reference_id' => $paymentData['reference_id'],
                     'user_id' => $paymentData['user_id'],
@@ -47,9 +47,21 @@ class Cypherpay
                     'status' => 'PENDING'
                 ]
             );
+            if($cardtype == 'Mobile')
+                return json_encode([
+                    "status"=>500,
+                    'data' => $paymentTransaction
+                ]);
+            else
             return view('cypherpay::payment', compact('session','session_request'));
 
         }else {
+            if($cardtype == 'Mobile')
+                return json_encode([
+                    "status"=>500,
+                    'error' => 'Error in initiating payment'
+                ]);
+            else
             return view('cypherpay::payment', compact('session','session_request'));
         }
     }
