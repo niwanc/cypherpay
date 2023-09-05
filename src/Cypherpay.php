@@ -16,7 +16,7 @@ class Cypherpay
 
     public function makepayment($paymentType, $orderReferenceId, $amount, $currency,$paymentData)
     {
-        $orderReferenceId = $paymentType === 'EXTERNAL' ? '88888'.$orderReferenceId:$orderReferenceId;
+        $orderReferenceId = $paymentType === 'EXTERNAL' ? intval('10000'.$orderReferenceId):$orderReferenceId;
         $session_request['initiator']['userId']= $paymentData['user_id'];
         $session_request['apiOperation']  = "INITIATE_CHECKOUT";
         $session_request['interaction']['operation'] = "PURCHASE";
@@ -25,10 +25,10 @@ class Cypherpay
         $session_request['interaction']['merchant']['address']['line1']  = config("cypherpay.address_line1");
         $session_request['interaction']['merchant']['address']['line2']  = config("cypherpay.address_line2");
         //todo change reference id
-        $session_request['order']['id'] =  $paymentType === 'EXTERNAL' ?'88888'.$orderReferenceId:$orderReferenceId;
+        $session_request['order']['id'] =  $orderReferenceId;
         $session_request['order']['amount'] = $amount;
         $session_request['order']['currency'] = $currency;
-        $session_request['order']['description'] =  '00000'.$orderReferenceId. '-->'.$paymentData['description'];
+        $session_request['order']['description'] =  $orderReferenceId. '-->'.$paymentData['description'];
         $session_request['order']['customerOrderDate'] = date('Y-m-d');
         $session_request['order']['customerReference'] = $paymentData['user_id'];
         $session_request['order']['reference'] = $orderReferenceId;
