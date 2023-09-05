@@ -39,7 +39,7 @@ class Cypherpay
             $paymentTransaction = PaymentTransaction::create(
                 [
                     'reference_id' => $orderReferenceId,
-                    'reference_type' => $paymentData['reference_type'],
+                    'reference_type' => $paymentType,
                     'user_id' => $paymentData['user_id'],
                     'description' => 'REFERENCE NO ------->' .$orderReferenceId,
                     'amount' => $amount,
