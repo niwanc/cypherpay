@@ -9,7 +9,7 @@ class PaymentTransaction extends Model
 
     protected $primaryKey = 'transaction_id';
 
-    public $fillable=['reference_id','user_id','description','amount','successIndicator','status','session_id','session_version'];
+    public $fillable=['reference_id','reference_type','user_id','description','amount','successIndicator','status','session_id','session_version'];
 
 
 
