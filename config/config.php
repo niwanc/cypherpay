@@ -9,6 +9,8 @@ return [
 
     "merchant_id" => env("CARD_PAYMENT_MERCHANT_ID"),
 
+    "merchant_name" => env("CARD_PAYMENT_MERCHANT_NAME"),
+
     "redirect_url" => env("CARD_PAYMENT_REDIRECT_URL"),
 
     "address_line1" => env("CARD_PAYMENT_ADDRESS_LINE1"),

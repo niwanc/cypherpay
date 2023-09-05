@@ -16,14 +16,16 @@ class Cypherpay
 
     public function makepayment($cardtype, $orderReferenceId, $amount, $currency,$paymentData)
     {
+        $orderReferenceId = $paymentData['reference_type'] === 'EXTERNAL' ? '88888'.$orderReferenceId:$orderReferenceId;
         $session_request['initiator']['userId']= $paymentData['user_id'];
         $session_request['apiOperation']  = "INITIATE_CHECKOUT";
         $session_request['interaction']['operation'] = "PURCHASE";
         $session_request['interaction']['returnUrl']  = $cardtype === 'Mobile'?config("cypherpay.redirect_url_mobile"):config("cypherpay.redirect_url") ;
-        $session_request['interaction']['merchant']['name']  =  '   MINISTRY OF WATER SUPPLY';
+        $session_request['interaction']['merchant']['name']  =  config("cypherpay.merchant_name");
         $session_request['interaction']['merchant']['address']['line1']  = config("cypherpay.address_line1");
         $session_request['interaction']['merchant']['address']['line2']  = config("cypherpay.address_line2");
-        $session_request['order']['id'] =  $paymentData['reference_id'];
+        //todo change reference id
+        $session_request['order']['id'] =  $paymentData['reference_type'] === 'EXTERNAL' ?'88888'.$paymentData['reference_id']:$paymentData['reference_id'];
         $session_request['order']['amount'] = $amount;
         $session_request['order']['currency'] = $currency;
         $session_request['order']['description'] =  $orderReferenceId. '-->'.$paymentData['description'];
@@ -38,6 +40,7 @@ class Cypherpay
             $paymentTransaction = PaymentTransaction::create(
                 [
                     'reference_id' => $paymentData['reference_id'],
+                    'reference_type' => $paymentData['reference_type'],
                     'user_id' => $paymentData['user_id'],
                     'description' => 'REFERENCE NO ------->' .$orderReferenceId,
                     'amount' => $amount,
