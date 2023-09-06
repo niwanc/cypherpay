@@ -14,9 +14,9 @@ class Cypherpay
     }
 
 
-    public function makepayment($paymentType, $orderReferenceId, $amount, $currency,$paymentData)
+    public function makepayment($paymentType, $orderReferenceId, $amount, $currency,$paymentData,$outputType)
     {
-        $orderReferenceId = $paymentType === 'EXTERNAL' ? intval('10000'.$orderReferenceId):$orderReferenceId;
+        $orderReferenceId = $paymentType === 'EXTERNAL'  ? intval('10000'.$orderReferenceId):$orderReferenceId;
         $session_request['initiator']['userId']= $paymentData['user_id'];
         $session_request['apiOperation']  = "INITIATE_CHECKOUT";
         $session_request['interaction']['operation'] = "PURCHASE";
@@ -49,7 +49,7 @@ class Cypherpay
                     'status' => 'PENDING'
                 ]
             );
-            if($paymentType == 'EXTERNAL')
+            if($outputType == 'JSON')
                 return json_encode([
                     "status"=>200,
                     'data' => $paymentTransaction
@@ -58,7 +58,7 @@ class Cypherpay
             return view('cypherpay::payment', compact('session','session_request'));
 
         }else {
-            if($paymentType == 'EXTERNAL')
+            if($outputType == 'JSON')
                 return json_encode([
                     "status"=>500,
                     'error' => 'Error in initiating payment'
