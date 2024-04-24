@@ -1,6 +1,5 @@
 {
     "name": "niwanc/cypherpay",
-    "version": "1.0.0",
     "description": "Mastercard and Visa for BOC",
     "keywords": [
         "cypherpay",
