@@ -2,8 +2,8 @@
 
 namespace Niwanc\Cypherpay;
 
-use Niwanc\Cypherpay\Models\PaymentTransaction;
 use Niwanc\Cypherpay\Services\PaymentService;
+use Niwanc\Cypherpay\Models\PaymentTransaction;
 
 class Cypherpay
 {
@@ -16,7 +16,9 @@ class Cypherpay
 
     public function makepayment($paymentType, $orderReferenceId, $amount, $currency,$paymentData,$outputType)
     {
-        $orderReferenceId = $paymentType === 'EXTERNAL'  ? intval('10000'.$orderReferenceId):$orderReferenceId;
+        //$reference = uniqid(time(), true);
+        $reference = uniqid(time());
+        //$orderReferenceId = $paymentType === 'EXTERNAL'  ? intval('10000'.$orderReferenceId):$orderReferenceId;
         $session_request['initiator']['userId']= $paymentData['user_id'];
         $session_request['apiOperation']  = "INITIATE_CHECKOUT";
         $session_request['interaction']['operation'] = "PURCHASE";
@@ -31,14 +33,16 @@ class Cypherpay
         $session_request['order']['description'] =  $orderReferenceId. '-->'.$paymentData['description'];
         $session_request['order']['customerOrderDate'] = date('Y-m-d');
         $session_request['order']['customerReference'] = $paymentData['user_id'];
-        $session_request['order']['reference'] = $orderReferenceId;
+        $session_request['order']['reference'] = $paymentData['order_id'];
+        $session_request['transaction']['reference'] = $reference;
 
         $session = $this->paymentService->getSession($session_request);
-
         if( $session['result'] == 'SUCCESS' && ! empty( $session['successIndicator'] ) ) {
             $paymentTransaction = PaymentTransaction::create(
                 [
-                    'reference_id' => $orderReferenceId,
+                    'transaction_reference' => $reference,
+                    'reference' => $orderReferenceId,
+                    'reference_id' => $paymentData['order_id'],
                     'reference_type' => $paymentType,
                     'user_id' => $paymentData['user_id'],
                     'description' => 'REFERENCE NO ------->' .$orderReferenceId,
@@ -95,6 +99,52 @@ class Cypherpay
             }
         }
 
+    }
+
+    public function VerifyTransaction($data)
+    {
+        $transactions = $this->paymentService->getPaymentDetails($data);
+        if ($transactions && $transactions['result'] == 'SUCCESS' && $transactions['status'] == 'CAPTURED') {
+            $transaction_index = count($transactions['transaction']) - 1;
+            $transaction_result = $transactions['transaction'][$transaction_index]['result'];
+            $transaction_receipt = $transactions['transaction'][$transaction_index]['transaction']['receipt'];
+            if ($transaction_result == 'SUCCESS' && !empty($transaction_receipt)) {
+                return ['status' => $transaction_result, 'transaction'=>$transactions['transaction'][$transaction_index]];
+            } else {
+                return ['status' => $transaction_result, 'transaction'=>[]];
+            }
+        }
+        else {
+            return false;
+        }
+    }
+
+    public function completePayment($data)
+    {
+        $transactions = $this->paymentService->getPaymentDetails($data);
+        if ($transactions && $transactions['result'] == 'SUCCESS' && $transactions['status'] == 'CAPTURED') {
+            $transaction_index = count($transactions['transaction']) - 1;
+            $transaction_result = $transactions['transaction'][$transaction_index]['result'];
+            $transaction_receipt = $transactions['transaction'][$transaction_index]['transaction']['receipt'];
+            $transaction_reference = $transactions['transaction'][$transaction_index]['transaction']['reference'];
+
+            $payment_transaction = PaymentTransaction::where('transaction_reference', $transaction_reference)->first();
+
+            if($payment_transaction) {
+                if ($transaction_result == 'SUCCESS' && !empty($transaction_receipt)) {
+                    $payment_transaction->status = 'COMPLETED';
+                    $payment_transaction->transaction_reference_id = $transaction_receipt;
+                    $payment_transaction->save();
+                    return $payment_transaction;
+
+                } else {
+                    $payment_transaction->status = 'FAILED';
+                    $payment_transaction->save();
+                    return $payment_transaction;
+                }
+            }
+        }
+        return false;
     }
 
     public function response($resultData)

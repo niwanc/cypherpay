@@ -23,7 +23,7 @@ class CreatePaymentTransactionsTable extends Migration
             $table->text('successIndicator');
             $table->text('session_id');
             $table->text('session_version');
-            $table->text('transaction_reference_id');
+            $table->text('transaction_reference_id')->nullable();
             $table->enum('status', ['PENDING', 'COMPLETED', 'REJECTED'])->default('PENDING');
             $table->timestamps();
         });

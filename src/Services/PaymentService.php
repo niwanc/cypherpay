@@ -34,7 +34,7 @@ class PaymentService extends Service
 
     public function getPaymentDetails($paymentDetails)
     {
-        $this->endpoint = '/merchant/'.config("cypherpay.merchant_id").'/order/'.$paymentDetails['reference_id'];
+        $this->endpoint = '/merchant/'.config("cypherpay.merchant_id").'/order/'.$paymentDetails['reference'];
         $response = $this->httpRequest('get',[]);
         if($response['status'] == 400){
             return ['result' => $response['data']['error']['cause']];
