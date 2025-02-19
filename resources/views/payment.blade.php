@@ -1,6 +1,6 @@
 <html>
 <head>
-    <script src="https://test-bankofceylon.mtf.gateway.mastercard.com/static/checkout/checkout.min.js" data-error="errorCallback" data-cancel="cancelCallback"></script>
+    <script src="{{config('cypherpay.payment_base_url')}}/static/checkout/checkout.min.js" data-error="errorCallback" data-cancel="cancelCallback"></script>
     @if($session['result'] == 'SUCCESS')
     <script type="text/javascript">
         function errorCallback(error) {

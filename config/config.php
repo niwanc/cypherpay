@@ -18,4 +18,7 @@ return [
     "address_line2" => env("CARD_PAYMENT_ADDRESS_LINE2"),
 
     "redirect_url_external" => env("CARD_PAYMENT_REDIRECT_URL_EXTERNAL"),
+
+    "payment_base_url" => env("CARD_PAYMENT_BASE_URL"),
+
 ];
